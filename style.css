@@ -1,0 +1,161 @@
+  :root {
+      --bg-color: #0f172a;
+      --circle-bg: rgba(56, 189, 248, 0.2);
+      --circle-inner: #38bdf8;
+      --text-main: #ffffff;
+      --text-secondary: #94a3b8;
+  }
+
+  * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100dvh;
+      overflow: hidden;
+      user-select: none;
+      -webkit-user-select: none;
+  }
+
+  .breathing-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      max-width: 400px;
+      padding: 20px;
+  }
+
+  #instruction {
+      font-size: clamp(1.5rem, 6vw, 2.2rem);
+      font-weight: 300;
+      margin: 0 0 2rem 0;
+      height: 3.5rem;
+      letter-spacing: 0.1em;
+      text-align: center;
+  }
+
+  .circle-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: min(70vw, 280px);
+      width: min(70vw, 280px);
+  }
+
+  .outer-circle {
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      background-color: var(--circle-bg);
+      border-radius: 50%;
+      z-index: 1;
+  }
+
+  .inner-circle {
+      position: absolute;
+      height: 50%;
+      width: 50%;
+      background: radial-gradient(circle, #38bdf8 0%, #0ea5e9 100%);
+      border-radius: 50%;
+      z-index: 2;
+      transition: transform linear;
+      box-shadow: 0 0 30px rgba(56, 189, 248, 0.4);
+  }
+
+  .timer-display {
+      position: relative;
+      font-size: clamp(2.5rem, 10vw, 4rem);
+      font-weight: 700;
+      z-index: 3;
+      font-variant-numeric: tabular-nums;
+  }
+
+  .progress-dots {
+      display: flex;
+      gap: 12px;
+      margin-top: 30px;
+  }
+
+  .dot {
+      width: 10px;
+      height: 10px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      transition: all 0.3s ease;
+  }
+
+  .dot.active {
+      background: var(--circle-inner);
+      box-shadow: 0 0 12px var(--circle-inner);
+      transform: scale(1.2);
+  }
+
+  .btn-start {
+      margin-top: 3rem;
+      padding: 1.2rem 4rem;
+      border-radius: 50px;
+      background: white;
+      color: var(--bg-color);
+      font-weight: 700;
+      font-size: 1.1rem;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+      transition: transform 0.2s ease, background-color 0.2s ease;
+  }
+
+  .btn-start:active {
+      transform: scale(0.95);
+      background: #e2e8f0;
+  }
+
+  .footer-text {
+      margin-top: 2rem;
+      color: var(--text-secondary);
+      font-size: clamp(0.75rem, 3vw, 0.875rem);
+      text-align: center;
+      line-height: 1.6;
+      max-width: 260px;
+  }
+
+  /* Animation States */
+  .inhale {
+      transform: scale(2);
+      transition-duration: 4000ms;
+  }
+
+  .hold {
+      transform: scale(2);
+      transition-duration: 7000ms;
+  }
+
+  .exhale {
+      transform: scale(1);
+      transition-duration: 8000ms;
+  }
+
+  @media (max-height: 600px) {
+      #instruction {
+          margin-bottom: 1rem;
+      }
+
+      .btn-start {
+          margin-top: 1.5rem;
+      }
+
+      .footer-text {
+          margin-top: 1rem;
+      }
+  }
