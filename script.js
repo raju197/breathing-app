@@ -150,7 +150,13 @@ window.renderTasks = function () {
                             <h3 style="margin:0; font-size:1.1rem; overflow:hidden; text-overflow:ellipsis;">${t.name}</h3>
                             <p style="margin:4px 0; font-size:0.8rem; color:var(--text-secondary); line-height: 1.2;">${t.description || 'Focus session'}</p>
                         </div>
-                        <div class="task-timer" id="timer-${t.id}">${formatTime(t.elapsed)}</div>
+                        <div style="display:flex;flex-direction:column;" >
+                        <div> <span class="task-timer" >Time : ${t.budgetMinutes} Min</span> </div>
+                         <div class="task-timer" id="timer-${t.id}">
+                                              
+                        ${formatTime(t.elapsed)}</div>
+                        </div>
+                       
                     </div>
                     <div class="task-controls">
                         ${active ? `<button class="task-btn stop-btn" onclick="stopTaskTimer('${t.id}')">PAUSE</button>` : `<button class="task-btn start-btn" onclick="startTaskTimer('${t.id}')">START</button>`}
