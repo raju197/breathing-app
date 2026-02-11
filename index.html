@@ -22,11 +22,16 @@
                 <div id="ball" class="inner-circle"></div>
                 <div id="countdown" class="timer-display"></div>
             </div>
-            <div class="progress-dots" style="display: flex; gap: 12px; justify-content: center; margin-bottom: 2rem;">
-                <div class="dot" style="width:12px; height:12px; border-radius:50%; background: #334155;"></div>
-                <div class="dot" style="width:12px; height:12px; border-radius:50%; background: #334155;"></div>
-                <div class="dot" style="width:12px; height:12px; border-radius:50%; background: #334155;"></div>
-                <div class="dot" style="width:12px; height:12px; border-radius:50%; background: #334155;"></div>
+            <div class="progress-dots"
+                style="display: flex; gap: 14px; justify-content: center; margin-bottom: 2.5rem;">
+                <div class="dot" style="width:10px; height:10px; border-radius:50%; background: rgba(255,255,255,0.1);">
+                </div>
+                <div class="dot" style="width:10px; height:10px; border-radius:50%; background: rgba(255,255,255,0.1);">
+                </div>
+                <div class="dot" style="width:10px; height:10px; border-radius:50%; background: rgba(255,255,255,0.1);">
+                </div>
+                <div class="dot" style="width:10px; height:10px; border-radius:50%; background: rgba(255,255,255,0.1);">
+                </div>
             </div>
             <button id="toggleBtn" class="btn-main">START</button>
         </div>
@@ -40,23 +45,29 @@
                     <span id="targetLabel" class="target-edit" onclick="openTargetModal()">Target: 4h</span>
                 </div>
                 <div id="weeklyChart" class="weekly-chart"></div>
+                <center><button id="backTodayBtn" class="back-to-today" onclick="viewToday()">View Today</button>
+                </center>
             </div>
 
-            <div class="daily-goal-card">
-                <span id="currentDateLabel" style="font-size: 0.75rem; color: var(--accent); opacity: 0.8;">Today</span>
+            <div class="daily-goal-card" id="statsCard">
+                <div id="historyBadge" class="history-badge" style="display: none;">History</div>
+                <span id="currentDateLabel"
+                    style="font-size: 0.8rem; color: var(--accent); font-weight: 700;">Today</span>
                 <div id="overallTime" class="goal-time">00:00:00</div>
-                <div class="analytics-bar" style="height: 14px; background: #0f172a; margin: 12px 0; border-radius: 10px; overflow: hidden;">
-                    <div id="totalProgressBar" style="width: 0%; height: 100%; background: var(--accent); transition: width 0.3s;"></div>
+                <div class="analytics-bar"
+                    style="height: 12px; background: rgba(255,255,255,0.05); margin: 16px 0; border-radius: 10px; overflow: hidden;">
+                    <div id="totalProgressBar"
+                        style="width: 0%; height: 100%; background: var(--accent); transition: width 0.4s;"></div>
                 </div>
                 <div id="goalRemaining" style="font-size: 0.85rem; font-weight: 600; color: var(--text-secondary);">
-                    Start your first session
+                    Tap 'Add Subject' to start
                 </div>
             </div>
 
-            <div class="todo-input-group">
-                <input type="text" id="taskName" placeholder="Topic Name (e.g. Physics)" autocomplete="off">
-                <input type="number" id="taskBudget" placeholder="Goal (Mins)" pattern="\d*">
-                <textarea id="taskDesc" placeholder="Description..." rows="2"></textarea>
+            <div class="todo-input-group" id="inputArea">
+                <input type="text" id="taskName" placeholder="Topic Name (e.g. Physics)">
+                <input type="number" id="taskBudget" placeholder="Topic Budget (Minutes)">
+                <textarea id="taskDesc" placeholder="Session notes..." rows="2"></textarea>
                 <button class="add-btn" onclick="addTask()">Add Subject</button>
             </div>
 
@@ -66,14 +77,16 @@
 
     <div id="targetModal">
         <div class="modal-content">
-            <h3 style="margin: 0 0 8px 0; text-align: center;">Daily Goal (Hours)</h3>
-            <input type="number" id="newTargetInput" value="4" step="0.5" pattern="\d*" style="text-align: center; font-size: 1.5rem; margin-bottom: 24px;">
+            <h3 style="text-align: center;">Daily Study Goal</h3>
+            <input type="number" id="newTargetInput" value="4" step="0.5"
+                style="text-align: center; font-size: 2rem; font-weight: 900;">
             <div style="display: flex; gap: 12px;">
-                <button class="task-btn" style="background: #334155; color: white;" onclick="closeTargetModal()">Cancel</button>
+                <button class="task-btn" style="background: rgba(255,255,255,0.05); color: white;"
+                    onclick="closeTargetModal()">Cancel</button>
                 <button class="task-btn start-btn" onclick="saveNewTarget()">Save</button>
             </div>
         </div>
-    </div>  
+    </div>
 
     <script src="script.js"></script>
 
