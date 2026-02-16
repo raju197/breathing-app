@@ -22,65 +22,108 @@
                 <div id="ball" class="inner-circle"></div>
                 <div id="countdown" class="timer-display"></div>
             </div>
-            <div class="progress-dots"
-                style="display: flex; gap: 14px; justify-content: center; margin-bottom: 2.5rem;">
-                <div class="dot" style="width:10px; height:10px; border-radius:50%; background: rgba(255,255,255,0.1);">
-                </div>
-                <div class="dot" style="width:10px; height:10px; border-radius:50%; background: rgba(255,255,255,0.1);">
-                </div>
-                <div class="dot" style="width:10px; height:10px; border-radius:50%; background: rgba(255,255,255,0.1);">
-                </div>
-                <div class="dot" style="width:10px; height:10px; border-radius:50%; background: rgba(255,255,255,0.1);">
-                </div>
-            </div>
             <button id="toggleBtn" class="btn-main">START</button>
         </div>
     </section>
 
     <section id="todo-section" class="content-section">
         <div class="todo-container">
+            <!-- Weekly Progress -->
             <div class="weekly-card">
                 <div class="weekly-header">
-                    <span>Weekly History</span>
-                    <span id="targetLabel" class="target-edit" onclick="openTargetModal()">Target: 4h</span>
+                    <span>Monthly Progress</span>
+                    <span id="backTodayBtn"style="cursor:pointer; color:var(--accent)"
+                    onclick="viewToday()">Return to Today</span>
+                    <span id="targetLabel" class="target-edit" style="cursor:pointer; color:var(--accent)"
+                        onclick="openTargetModal()">Goal: 4h</span>
                 </div>
-                <div id="weeklyChart" class="weekly-chart"></div>
-                <center><button id="backTodayBtn" class="back-to-today" onclick="viewToday()">View Today</button>
-                </center>
+                <div class="chart-scroll-wrapper" id="chartWrapper">
+                    <div id="weeklyChart" class="weekly-chart"></div>
+                </div>
             </div>
 
-            <div class="daily-goal-card" id="statsCard">
+            <!-- Stats Card -->
+            <div class="daily-goal-card">
                 <div id="historyBadge" class="history-badge" style="display: none;">History</div>
                 <span id="currentDateLabel"
-                    style="font-size: 0.8rem; color: var(--accent); font-weight: 700;">Today</span>
+                    style="font-size: 0.8rem; color: var(--accent); font-weight: 700; text-transform: uppercase;">Today</span>
                 <div id="overallTime" class="goal-time">00:00:00</div>
-                <div class="analytics-bar"
-                    style="height: 12px; background: rgba(255,255,255,0.05); margin: 16px 0; border-radius: 10px; overflow: hidden;">
-                    <div id="totalProgressBar"
-                        style="width: 0%; height: 100%; background: var(--accent); transition: width 0.4s;"></div>
-                </div>
-                <div id="goalRemaining" style="font-size: 0.85rem; font-weight: 600; color: var(--text-secondary);">
-                    Tap 'Add Subject' to start
+                <div id="goalRemaining" style="font-size: 0.85rem; color: var(--text-secondary);">Add topics to begin
                 </div>
             </div>
 
-            <div class="todo-input-group" id="inputArea">
-                <input type="text" id="taskName" placeholder="Topic Name (e.g. Physics)">
-                <input type="number" id="taskBudget" placeholder="Topic Budget (Minutes)">
-                <textarea id="taskDesc" placeholder="Session notes..." rows="2"></textarea>
-                <button class="add-btn" onclick="addTask()">Add Subject</button>
+            <!-- IMPROVED Daily Utilization Plan -->
+            <div class="planner-card">
+                <div class="planner-title">
+                    
+                    Utilization Plan
+                </div>
+                <div class="planner-grid">
+                    <label>Accomplished</label>
+                    <div class="planner-box">
+                        
+                        <textarea id="planDone" class="planner-input" placeholder="Today's wins..." rows="3"
+                            oninput="savePlanner()"></textarea>
+                    </div>
+                    <label>Next Priority</label>
+                    <div class="planner-box">
+                        
+                        <textarea id="planTodo" class="planner-input" placeholder="For tomorrow..." rows="3"
+                            oninput="savePlanner()"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXPENSE TRACKER CARD -->
+            <div class="expense-card">
+                <div class="expense-header">
+                    <div class="expense-title">
+                        
+                        Daily Expenses
+                    </div>
+                    <div id="expenseTotal" class="expense-total">₹0</div>
+                </div>
+                <div class="expense-form" id="expenseInputArea">
+                    <input type="text" id="expName" class="expense-input" placeholder="What For?">
+                    <input type="number" id="expAmt" class="expense-input" placeholder="Amount">
+                    <button class="expense-add-btn" onclick="addExpense()">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                    </button>
+                </div>
+                <div id="expenseList" class="expense-list"></div>
+            </div>
+
+            <!-- Topic Input Area -->
+            <div id="inputArea">
+                <div
+                    style="background: var(--card-bg); padding: 20px; border-radius: 24px; margin-bottom: 24px; border: 1px solid rgba(255,255,255,0.05);">
+                    <input type="text" id="taskName" placeholder="Topic Name">
+                    <input type="number" id="taskBudget" placeholder="Budget (Mins)">
+                    <textarea id="taskDesc" placeholder="Notes..." rows="2"></textarea>
+                    <button class="add-btn" onclick="addTask()">Add Topic</button>
+                </div>
             </div>
 
             <ul id="taskList" style="list-style: none; padding: 0;"></ul>
+            
+                
+
+           
+           
         </div>
     </section>
 
+    <!-- Modal -->
     <div id="targetModal">
         <div class="modal-content">
-            <h3 style="text-align: center;">Daily Study Goal</h3>
+            <h3 style="text-align: center; margin-bottom: 20px;">Daily Goal</h3>
             <input type="number" id="newTargetInput" value="4" step="0.5"
-                style="text-align: center; font-size: 2rem; font-weight: 900;">
-            <div style="display: flex; gap: 12px;">
+                style="text-align: center; font-size: 2.5rem; border: none; background: transparent; border-bottom: 2px solid var(--accent); border-radius:0;">
+            <p style="text-align: center; color: var(--text-secondary);">hours per day</p>
+            <div style="display: flex; gap: 12px; margin-top: 20px;">
                 <button class="task-btn" style="background: rgba(255,255,255,0.05); color: white;"
                     onclick="closeTargetModal()">Cancel</button>
                 <button class="task-btn start-btn" onclick="saveNewTarget()">Save</button>
