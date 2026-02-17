@@ -58,7 +58,15 @@ function renderUI() {
     document.getElementById('historyBadge').style.display = isToday ? 'none' : 'block';
     document.getElementById('backTodayBtn').style.display = isToday ? 'none' : 'block';
 
-    const dObj = new Date(viewingDate);
+    // const dObj = new Date(viewingDate);
+    // debugger
+    // const viewingDate = "21/01/2026";
+
+// Split the string by the slash
+const [day, month, year] = viewingDate.split('/');
+
+// Create the date object (Note: Month is 0-indexed, so Jan is 0)
+const dObj = new Date(year, month - 1, day)
     document.getElementById('currentDateLabel').innerText = isToday ? 'Today' : dObj.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
 
     // Planner
@@ -124,6 +132,7 @@ function renderWeeklyChart() {
 
     for (let i = 29; i >= 0; i--) {
         const d = new Date(); d.setDate(today.getDate() - i);
+        const monthName = d.toLocaleString('en-US', { month: 'short' }); 
         const ds = d.toLocaleDateString();
         const dayTasks = (ds === new Date().toLocaleDateString()) ? tasks : (weeklyHistory[ds] || []);
         const val = dayTasks.reduce((acc, t) => acc + (t.elapsed || 0), 0);
@@ -135,7 +144,7 @@ function renderWeeklyChart() {
                         <div style="font-size:0.6rem; color:var(--text-secondary); height:12px;">${val > 0 ? (val / 3600000).toFixed(1) + 'h' : ''}</div>
                         <div class="chart-bar ${val > 0 ? 'filled' : ''} ${pct >= 100 ? 'over' : ''}" style="height: ${Math.max(4, Math.min(pct, 100))}%"></div>
                         <div class="chart-day-label">${d.toLocaleDateString('en-US', { weekday: 'short' })}</div>
-                        <div class="chart-date-label">${d.getDate()}</div>
+                        <div class="chart-date-label">${d.getDate() }${monthName}</div>
                     </div>
                 `);
     }
