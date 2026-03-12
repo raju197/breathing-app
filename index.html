@@ -3,18 +3,20 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Breathe & Study Track</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Breathe & Study</title>
+    <!-- Modern Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <nav class="nav-tabs">
-        <button class="tab-btn active" id="breatheTab" onclick="switchTab('breathe')">Breathe</button>
-        <button class="tab-btn" id="todoTab" onclick="switchTab('todo')">Study</button>
-    </nav>
-
-    <section id="breathe-section" class="content-section active">
+    <div class="app-container">
+        <!-- Content Sections Container -->
+        <main class="main-content">
+        <section id="breathe-section" class="content-section active">
         <div class="breathing-container">
             <h2 id="instruction">Ready?</h2>
             <div class="circle-wrap">
@@ -115,6 +117,21 @@
            
         </div>
     </section>
+
+        </main>
+
+        <!-- Fixed Bottom Navigation -->
+        <nav class="bottom-nav">
+            <button class="nav-btn active" id="breatheTab" onclick="switchTab('breathe')">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4"></path><path d="M12 16h.01"></path></svg>
+                <span>Breathe</span>
+            </button>
+            <button class="nav-btn" id="todoTab" onclick="switchTab('todo')">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                <span>Track</span>
+            </button>
+        </nav>
+    </div>
 
     <!-- Modal -->
     <div id="targetModal">
