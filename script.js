@@ -4,6 +4,8 @@ let tasks = JSON.parse(localStorage.getItem('study_tasks_v14')) || [];
 let weeklyHistory = JSON.parse(localStorage.getItem('study_weekly_v14')) || {};
 let dailyPlanners = JSON.parse(localStorage.getItem('study_planners_v14')) || {};
 let dailyExpenses = JSON.parse(localStorage.getItem('study_expenses_v14')) || {};
+let allHabits = JSON.parse(localStorage.getItem('study_habits_v1')) || [];
+let dailyHabitLogs = JSON.parse(localStorage.getItem('study_habit_logs_v1')) || {}; // Format: { "dd/mm/yyyy": ["habitId1", "habitId2"] }
 
 let activeTaskId = null;
 let timerInterval = null;
@@ -16,6 +18,8 @@ function persist() {
     localStorage.setItem('study_target_v14', dailyTargetHours.toString());
     localStorage.setItem('study_planners_v14', JSON.stringify(dailyPlanners));
     localStorage.setItem('study_expenses_v14', JSON.stringify(dailyExpenses));
+    localStorage.setItem('study_habits_v1', JSON.stringify(allHabits));
+    localStorage.setItem('study_habit_logs_v1', JSON.stringify(dailyHabitLogs));
 }
 
 window.switchTab = function (tab) {
@@ -23,7 +27,7 @@ window.switchTab = function (tab) {
     document.getElementById(tab + 'Tab').classList.add('active');
     document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
     document.getElementById(tab + '-section').classList.add('active');
-    if (tab === 'todo') { checkDailyReset(); viewToday(); }
+    if (tab === 'todo' || tab === 'habits') { checkDailyReset(); viewToday(); }
 }
 
 function checkDailyReset() {
@@ -80,6 +84,7 @@ const dObj = new Date(year, month - 1, day)
     renderWeeklyChart();
     updateOverallStats(currentTasks);
     renderExpenses();
+    renderHabits();
 }
 
 // --- Planner Logic ---
@@ -120,6 +125,85 @@ function renderExpenses() {
         item.className = 'expense-item';
         item.innerHTML = `<span>${e.name}</span><span style="font-weight:700;">₹${e.amount}</span>`;
         list.appendChild(item);
+    });
+}
+
+// --- Habits Logic ---
+window.addHabit = () => {
+    const nameInput = document.getElementById('newHabitName');
+    const name = nameInput.value.trim();
+    if (!name) return;
+    
+    allHabits.push({ id: Date.now().toString(), name, createdAt: Date.now() });
+    nameInput.value = '';
+    persist();
+    renderHabits();
+}
+
+window.toggleHabit = (habitId) => {
+    const isToday = viewingDate === new Date().toLocaleDateString();
+    if (!isToday) return; // Cannot check off past habits
+    
+    if (!dailyHabitLogs[viewingDate]) dailyHabitLogs[viewingDate] = [];
+    const logs = dailyHabitLogs[viewingDate];
+    
+    const index = logs.indexOf(habitId);
+    if (index > -1) {
+        logs.splice(index, 1);
+    } else {
+        logs.push(habitId);
+    }
+    persist();
+    renderHabits();
+}
+
+window.deleteHabit = (habitId) => {
+    allHabits = allHabits.filter(h => h.id !== habitId);
+    persist();
+    renderHabits();
+}
+
+function renderHabits() {
+    const container = document.getElementById('habitsList');
+    if (!container) return;
+    
+    const isToday = viewingDate === new Date().toLocaleDateString();
+    document.getElementById('inputAreaHabits').style.display = isToday ? 'block' : 'none';
+    
+    const logs = dailyHabitLogs[viewingDate] || [];
+    
+    // Calculate Progress
+    const totalHabits = allHabits.length;
+    const completedCount = logs.length;
+    let progressPct = totalHabits === 0 ? 0 : Math.round((completedCount / totalHabits) * 100);
+    // don't exceed 100 if somehow logs > allHabits (e.g., deleted habits)
+    progressPct = Math.min(100, progressPct);
+    
+    document.getElementById('habitProgressFill').style.width = `${progressPct}%`;
+    document.getElementById('habitProgressText').innerText = `${progressPct}% Completed`;
+
+    container.innerHTML = allHabits.length ? '' : '<div style="color:var(--text-secondary); text-align:center; padding:20px;">No habits defined yet. Start building a routine!</div>';
+
+    allHabits.forEach(habit => {
+        const isCompleted = logs.includes(habit.id);
+        
+        const item = document.createElement('div');
+        item.className = `habit-item ${isCompleted ? 'completed' : ''}`;
+        
+        item.innerHTML = `
+            <div class="habit-item-left" onclick="toggleHabit('${habit.id}')" style="cursor: ${isToday ? 'pointer' : 'default'}; flex:1;">
+                <div class="habit-checkbox">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                </div>
+                <div class="habit-name">${habit.name}</div>
+            </div>
+            ${isToday ? `
+                <button class="habit-delete" onclick="deleteHabit('${habit.id}')" title="Delete Habit">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                </button>
+            ` : ''}
+        `;
+        container.appendChild(item);
     });
 }
 
